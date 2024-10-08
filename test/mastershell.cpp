@@ -2,15 +2,12 @@
 
 #include "nocdebug.h"
 
-MasterShell::MasterShell(sc_module_name name) :
-    sc_module(name)
-{
+MasterShell::MasterShell(sc_module_name name): sc_module(name) {
     NoCDebug::printDebug(std::string("> Master"), NoCDebug::Assembly);
     SC_THREAD(_threadRun);
 }
 
-void MasterShell::_threadRun()
-{
+void MasterShell::_threadRun() {
     int send;
     char rec;
     for (;;) {
@@ -33,10 +30,10 @@ void MasterShell::_threadRun()
         shellOut.write(rec);
 
         // Só lê do Master
-//        int readVal;
-//        shellIn.read(readVal);
-//        std::cout << readVal << std::endl;
-//        char writeVal = 'v';
-//        shellOut.write(writeVal);
+        //        int readVal;
+        //        shellIn.read(readVal);
+        //        std::cout << readVal << std::endl;
+        //        char writeVal = 'v';
+        //        shellOut.write(writeVal);
     }
 }

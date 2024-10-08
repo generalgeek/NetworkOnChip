@@ -2,16 +2,13 @@
 
 #include "nocdebug.h"
 
-ProcessorElementMasterShell::ProcessorElementMasterShell(sc_module_name name, unsigned position, unsigned slavePosition) :
-    sc_module(name),
-    _position(position),
-    _slavePosition(slavePosition)
-{
+ProcessorElementMasterShell::ProcessorElementMasterShell(sc_module_name name, unsigned position,
+                                                         unsigned slavePosition):
+    sc_module(name), _position(position), _slavePosition(slavePosition) {
     SC_THREAD(_threadRun);
 }
 
-void ProcessorElementMasterShell::_threadRun()
-{
+void ProcessorElementMasterShell::_threadRun() {
     int send;
     char rec;
     for (;;) {
@@ -34,10 +31,10 @@ void ProcessorElementMasterShell::_threadRun()
         shellOut.write(rec);
 
         // Só lê do Master
-//        int readVal;
-//        shellIn.read(readVal);
-//        std::cout << readVal << std::endl;
-//        char writeVal = 'v';
-//        shellOut.write(writeVal);
+        //        int readVal;
+        //        shellIn.read(readVal);
+        //        std::cout << readVal << std::endl;
+        //        char writeVal = 'v';
+        //        shellOut.write(writeVal);
     }
 }

@@ -1,144 +1,44 @@
-#######################################################################
-#
-# THIS FILE MAKES THE COMPILATION OF CODE DEVELOPED IN THIS SEMESTER AUTOMATIC.
-# BY jesseh.barreto@gmail.com
-#
-#
-# TO USE JUST ADD A NEW SUB_DIRECTORY WITH A CMAKELIST.TXT INSIDE.
-# WITH:
-#       add_subdirectory(dir_name)
-#       add_executable(bin_name source_code)
-#       target_link_libraries(bin_name libraries)
-#
-#######################################################################
+cmake_minimum_required(VERSION 3.12)
+project(net_on_chip)
 
-project(NoC_on_SystemC)
-cmake_minimum_required(VERSION 2.8)
 
-# Instruct CMake to run moc automatically when needed
-set(CMAKE_AUTOMOC ON)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find SystemC
-set(SYSTEMC_HOME /opt/systemc-2.3.1a)
-#set(SYSTEMC_HOME /usr/local/systemc-2.3.1/)
-include_directories(SYSTEM "${SYSTEMC_HOME}/include")
-set(SYSTEMC_LIBRARIES ${SYSTEMC_HOME}/lib-linux64/libsystemc.a ${SYSTEMC_HOME}/lib-linux64/libsystemc-2.3.1.so)
-set (CMAKE_CXX_FLAGS "-pthread")
-set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_SYSTEM_NAME LINUX)
+set(CMAKE_C_COMPILER /usr/bin/gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/g++)
+message(STATUS "CMAKE_C_COMPILER: ${CMAKE_C_COMPILER}")
+message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
+set(CMAKE_BUILD_TYPE Debug)
 
-# Compile the NoCExample
-add_subdirectory(OldNoCExample)
+set(MAIN_CPP "test_src/test_routerchannel.cpp")
+file(GLOB SOURCE_CPP "src/*.cpp")
+# file(GLOB TEST_CPP "test/*.cpp")
+set(PROJECT_INCLUDE_DIR "src/" "test/" "include/")
 
-#Source and Include Directories
-include_directories("${PROJECT_SOURCE_DIR}/src"
-                    "${PROJECT_SOURCE_DIR}/test"
-                    "${PROJECT_SOURCE_DIR}/include")
+set(SYSTEMC_INCLUDE_DIR "/usr/local/include")
+set(SYSTEMC_LIBRARY_DIR "/usr/local/lib")
+include_directories(${SYSTEMC_INCLUDE_DIR})
+link_directories(${SYSTEMC_LIBRARY_DIR})
 
-# Add files
-# Source List
-file(GLOB sourceList src/flit.cpp
-                     src/router.cpp
-                     src/routerchannel.cpp
-                     src/networkinterface.cpp
-                     src/networkinterfacefrontendbase.cpp
-                     src/nocassembler.cpp
-                     src/nocrouting.cpp
-                     src/pemaster.cpp
-                     src/pemaster.h
-                     src/peslave.cpp
-                     src/peslave.h
-                     src/pemastershell.cpp
-                     src/pemastershell.h
-                     src/peslaveshell.cpp
-                     src/peslaveshell.h
-                     src/penull.cpp
-                     src/penull.h
-                     src/penullshell.cpp
-                     src/penullshell.h
-                     )
+# 检查编译器版本
+execute_process(
+    COMMAND ${CMAKE_C_COMPILER} --version
+    OUTPUT_VARIABLE GCC_VERSION
+    ERROR_QUIET
+)
+execute_process(
+    COMMAND ${CMAKE_CXX_COMPILER} --version
+    OUTPUT_VARIABLE GPP_VERSION
+    ERROR_QUIET
+)
 
-# Test files list
-file(GLOB testList test/channeltester.cpp
-                   test/petestsenderfrontend.cpp
-                   test/petestsender.cpp
-                   test/petestreceiver.cpp
-                   test/petestreceiverfrontend.cpp
-                   test/master.cpp
-                   test/slave.cpp
-                   test/slaveshell.cpp
-                   test/mastershell.cpp
-                   )
+include_directories(${PROJECT_INCLUDE_DIR})
+include_directories(${SYSTEMC_INCLUDE_DIR})
+link_directories(${SYSTEMC_LIBRARY_DIR})
 
-# Include files list
-file(GLOB includeList include/noccommon.h
-                      include/nocdebug.h
-                      include/irouterchannel.h
-                      include/inetworkinterfacefrontend.h
-                      )
-
-# This Semester NoC
-# Compile Executable
-add_executable( NoC #Executable Binary
-                src/main.cpp
-                #Source List
-                ${sourceList}
-                 # PE List
-                 # Test List
-                ${testList}
-                #Include List
-                ${includeList}
-                )
-target_link_libraries(NoC ${SYSTEMC_LIBRARIES})
-
-##Disable compilation of the channel tester
-## Compile Executable
-#add_executable( NoCRouterChannelTester #Executable Binary
-#                test/routerchanneltester.cpp
-#                #Source List
-#                ${sourceList}
-#                 # Test List
-#                ${testList}
-#                #Include List
-#                ${includeList}
-#                )
-#target_link_libraries(NoCRouterChannelTester ${SYSTEMC_LIBRARIES})
-
-## Disable compilation of the networkInterface tester.
-## Compile Executable
-#add_executable( NoCNetworkInterfaceTester #Executable Binary
-#                test/networkinterfacetester.cpp #Source List
-#                #Source List
-#                ${sourceList}
-#                 # Test List
-#                ${testList}
-#                #Include List
-#                ${includeList}
-#               )
-#target_link_libraries(NoCNetworkInterfaceTester ${SYSTEMC_LIBRARIES})
-
-## Disable the compilation of the basic shell communication tester.
-## Compile Executable
-#add_executable( BasicShellCommunicationTest #Executable Binary
-#                test/basicshellscommunication.cpp
-#                include/specialkernel.cpp
-#                #Source List
-#                ${sourceList}
-#                 # Test List
-#                ${testList}
-#                #Include List
-#                ${includeList}
-#               )
-#target_link_libraries(BasicShellCommunicationTest ${SYSTEMC_LIBRARIES})
-
-## Disable the compilation of the router tester.
-## Compile Executable
-#add_executable( RouterTest #Executable Binary
-#                test/routertester.cpp #Source List
-#                #Source List
-#                ${sourceList}
-#                 # Test List
-#                ${testList}
-#                #Include List
-#                ${includeList}
-#               )
-#target_link_libraries(RouterTest ${SYSTEMC_LIBRARIES})
+add_executable( NOC ${SOURCE_CPP} ${MAIN_CPP})
+target_link_libraries(NOC systemc)

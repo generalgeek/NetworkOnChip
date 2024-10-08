@@ -10,33 +10,27 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #include "networkinterface.h"
 
 #include "nocdebug.h"
 
-NetworkInterface::NetworkInterface(sc_module_name name, unsigned id) :
-    sc_module(name),
-    _networkInterfaceId(id),
-    _frontEnd(nullptr)
-{
+NetworkInterface::NetworkInterface(sc_module_name name, unsigned id):
+    sc_module(name), _networkInterfaceId(id), _frontEnd(nullptr) {
     SC_THREAD(_threadReadFromShell);
     SC_THREAD(_threadWriteToShell);
 }
 
-INetworkInterfaceFrontEnd *NetworkInterface::getFrontEndReference()
-{
+INetworkInterfaceFrontEnd* NetworkInterface::getFrontEndReference() {
     return _frontEnd;
 }
 
-void NetworkInterface::connectFrontEnd(INetworkInterfaceFrontEnd *networkInterfaceFrontEnd)
-{
+void NetworkInterface::connectFrontEnd(INetworkInterfaceFrontEnd* networkInterfaceFrontEnd) {
     _frontEnd = networkInterfaceFrontEnd;
 }
 
-void NetworkInterface::_threadReadFromShell()
-{
+void NetworkInterface::_threadReadFromShell() {
     if (!_frontEnd) {
         std::string message("Shell Read - Front-End Not Connected NI-Id:");
         NoCDebug::printDebug(message + std::to_string(_networkInterfaceId) + " Name: " + name(), NoCDebug::NI, true);
@@ -61,8 +55,7 @@ void NetworkInterface::_threadReadFromShell()
     }
 }
 
-void NetworkInterface::_threadWriteToShell()
-{
+void NetworkInterface::_threadWriteToShell() {
     if (!_frontEnd) {
         std::string message("Shell Write - Front-End Not Connected NI-Id:");
         NoCDebug::printDebug(message + std::to_string(_networkInterfaceId) + " Name: " + name(), NoCDebug::NI, true);
@@ -93,20 +86,21 @@ void NetworkInterface::_threadWriteToShell()
     }
 }
 
-void NetworkInterface::_packMessage(unsigned destinationId, const std::vector<uint32_t> &payload)
-{
+void NetworkInterface::_packMessage(unsigned destinationId, const std::vector<uint32_t>& payload) {
     NoCDebug::printDebug("NI-ID:" + std::to_string(_networkInterfaceId) + " packeting message.", NoCDebug::NI);
     _sendPacket.clear();
-    uint16_t packetSize = static_cast<uint16_t>(std::min(static_cast<size_t>(std::numeric_limits<uint16_t>::max()),
-                                                         payload.size()));
-    NoCDebug::printDebug("NI-ID:" + std::to_string(_networkInterfaceId) + " " + std::to_string(packetSize) + " flits of data.", NoCDebug::NI);
+    uint16_t packetSize = static_cast<uint16_t>(
+        std::min(static_cast<size_t>(std::numeric_limits<uint16_t>::max()), payload.size()));
+    NoCDebug::printDebug(
+        "NI-ID:" + std::to_string(_networkInterfaceId) + " " + std::to_string(packetSize) + " flits of data.",
+        NoCDebug::NI);
     // Create Head Flit
     flit_t headerData = 0;
 
     headerData.range(15, 0) = packetSize;
     headerData.range(23, 16) = destinationId;
     headerData.range(31, 24) = _networkInterfaceId;
-    Flit *flit = new Flit(headerData, 0);
+    Flit* flit = new Flit(headerData, 0);
     _sendPacket.push_back(flit);
 
     // Create Tail Flits
@@ -120,22 +114,23 @@ void NetworkInterface::_packMessage(unsigned destinationId, const std::vector<ui
     // the Flit objects.
 }
 
-const void NetworkInterface::_unpackMessage(int *sourceId, std::vector<uint32_t> *payload)
-{
+const void NetworkInterface::_unpackMessage(int* sourceId, std::vector<uint32_t>* payload) {
     NoCDebug::printDebug("NI-ID:" + std::to_string(_networkInterfaceId) + " unpacketing message.", NoCDebug::NI);
     // Unpack Head Flit
-    Flit *flit = _receivePacket.at(0);
+    Flit* flit = _receivePacket.at(0);
     *sourceId = flit->getData().range(31, 24);
     payload->clear();
     uint16_t packetSize = flit->getData().range(15, 0);
-    NoCDebug::printDebug("NI-ID:" + std::to_string(_networkInterfaceId) + " " + std::to_string(packetSize) + " flits of data.", NoCDebug::NI);
+    NoCDebug::printDebug(
+        "NI-ID:" + std::to_string(_networkInterfaceId) + " " + std::to_string(packetSize) + " flits of data.",
+        NoCDebug::NI);
     for (uint16_t flitIndex = 1; flitIndex <= packetSize; flitIndex++) {
         flit = _receivePacket.at(flitIndex);
         payload->push_back(flit->getData().to_uint());
     }
 
     // Now delete all the flits.
-    for (Flit *f : _receivePacket) {
+    for (Flit* f : _receivePacket) {
         if (f) {
             delete f;
         }
@@ -143,9 +138,8 @@ const void NetworkInterface::_unpackMessage(int *sourceId, std::vector<uint32_t>
     _receivePacket.clear();
 }
 
-void NetworkInterface::_sendToRouter()
-{
-    for (Flit *flit : _sendPacket) {
+void NetworkInterface::_sendToRouter() {
+    for (Flit* flit : _sendPacket) {
         localChannelOut->sendFlit(flit);
     }
 
@@ -153,10 +147,9 @@ void NetworkInterface::_sendToRouter()
     _sendPacket.clear();
 }
 
-void NetworkInterface::_receiveFromRouter()
-{
+void NetworkInterface::_receiveFromRouter() {
     _receivePacket.clear();
-    Flit *flit;
+    Flit* flit;
     // Receive Header Flit
     flit = localChannelIn->receiveFlit();
     _receivePacket.push_back(flit);
@@ -168,4 +161,3 @@ void NetworkInterface::_receiveFromRouter()
         _receivePacket.push_back(flit);
     }
 }
-

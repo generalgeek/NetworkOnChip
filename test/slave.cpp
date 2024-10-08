@@ -2,15 +2,13 @@
 
 #include "nocdebug.h"
 
-Slave::Slave(sc_module_name name)
-{
+Slave::Slave(sc_module_name name) {
     _send = 'A';
 
     SC_THREAD(_threadRun);
 }
 
-void Slave::_threadRun()
-{
+void Slave::_threadRun() {
     for (;;) {
         int read = slaveIn.read();
         NoCDebug::printDebug("Slave <- SShell       DATA: " + std::to_string(read), NoCDebug::PE);

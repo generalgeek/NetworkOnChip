@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef INETWORKINTERFACEFRONTEND_H
 #define INETWORKINTERFACEFRONTEND_H
@@ -40,7 +40,7 @@ public:
      * \param payload the data to be read by the kernel from the shell.
      * \param dst The destination of this data.
      */
-    virtual void kernelReceivePayload(std::vector<uint32_t> &payload, int *dst) = 0;
+    virtual void kernelReceivePayload(std::vector<uint32_t>& payload, int* dst) = 0;
 
     /*!
      * \brief This method is used by the kernel to send data to the shell.
@@ -49,7 +49,7 @@ public:
      * \param payload the data to be write by the kernel to the shell.
      * \param src The source of this data.
      */
-    virtual void kernelSendPayload(const std::vector<uint32_t> &payload, int *src) = 0;
+    virtual void kernelSendPayload(const std::vector<uint32_t>& payload, int* src) = 0;
 
     /*!
      * \brief This method is used by the kernel to receive a reading request from the shell.

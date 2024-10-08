@@ -7,7 +7,7 @@ class Master : public sc_module
 {
     SC_HAS_PROCESS(Master);
 
-    int *data;
+    int* data;
 
     void _threadRun();
 

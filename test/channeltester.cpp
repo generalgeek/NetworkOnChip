@@ -1,17 +1,14 @@
 #include "channeltester.h"
 
-ChannelTester::ChannelTester(sc_module_name name, int id, bool send) :
-    _send(send)
-{
+ChannelTester::ChannelTester(sc_module_name name, int id, bool send): _send(send) {
     _0ID = id;
     _packetCounter = 0;
 
     SC_THREAD(_runThread);
 }
 
-void ChannelTester::_runThread()
-{
-    Flit *flit;
+void ChannelTester::_runThread() {
+    Flit* flit;
     for (;;) {
         if (_send) {
             _send = false;
@@ -37,6 +34,3 @@ void ChannelTester::_runThread()
         }
     }
 }
-
-
-

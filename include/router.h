@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef ROUTER_H
 #define ROUTER_H
@@ -36,7 +36,7 @@ class Router : public sc_module
     /*!
      * \brief Buffers used at each channel input.
      */
-    std::vector<std::pair<sc_fifo<Flit *> *, Link>> _inputBuffers;
+    std::vector<std::pair<sc_fifo<Flit*>*, Link>> _inputBuffers;
 
     /*!
      * \brief This events are responsible for synchronize and work as flags to indicate that individual channels
@@ -52,7 +52,7 @@ class Router : public sc_module
     /*!
      * \brief This vector of mutex holds whether each output channel is available to be written to.
      */
-    std::vector<sc_mutex *> _mutexInputChannels;
+    std::vector<sc_mutex*> _mutexInputChannels;
 
     /*!
      * \brief Identification number pf the current link being used by the arbiter.
@@ -83,7 +83,7 @@ class Router : public sc_module
      * \param flit The head flit which holds information about the source and destination of this packet.
      * \return The link which all this packet's flits will be routed.
      */
-    Link _routingMethod(Flit *flit);
+    Link _routingMethod(Flit* flit);
 
     /*!
      * \brief Initialize the channel buffer pairs.
@@ -98,13 +98,14 @@ class Router : public sc_module
      * \param localBuffer The internal buffer used to temporary hold the flits.
      * \param localBufferFlitsDstLink The destination identification of the flits inside of the buffer.
      */
-    void _readFromChannel(sc_port<IRouterChannel> *inputChannel, sc_fifo<Flit *> *localBuffer, Link &localBufferFlitsDstLink);
+    void _readFromChannel(sc_port<IRouterChannel>* inputChannel, sc_fifo<Flit*>* localBuffer,
+                          Link& localBufferFlitsDstLink);
 
 public:
     /*!
      * \brief Ports connections to communicate with other routers/NI.
      */
-    sc_port<IRouterChannel> localChannelIn, localChannelOut;
+    sc_port<IRouterChannel> localChannelIn, localChannelOut;//连接PE
     sc_port<IRouterChannel> northChannelIn, northChannelOut;
     sc_port<IRouterChannel> southChannelIn, southChannelOut;
     sc_port<IRouterChannel> westChannelIn, westChannelOut;

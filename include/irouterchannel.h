@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef IROUTERCHANNEL_H
 #define IROUTERCHANNEL_H
@@ -31,13 +31,13 @@ public:
      * \brief Writes a flit to the channel.
      * \param flit A reference to the \c Flit that will be written to the channel.
      */
-    virtual void sendFlit(Flit *flit) = 0;
+    virtual void sendFlit(Flit* flit) = 0;
 
     /*!
      * \brief Reads a flit from the channel.
      * \param flit A reference to the \c Flit that will be read from the channel.
      */
-    virtual Flit *receiveFlit() = 0;
+    virtual Flit* receiveFlit() = 0;
 };
 
 #endif // IROUTERCHANNEL_H

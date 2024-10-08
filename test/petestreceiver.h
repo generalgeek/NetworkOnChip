@@ -19,9 +19,9 @@ public:
 
     PETestReceiver(sc_module_name name);
 
-    const std::__cxx11::string getName();
+    const std::string getName();
 
-    const std::string &getMessage();
+    const std::string& getMessage();
 };
 
 #endif // PETESTRECEIVER_H

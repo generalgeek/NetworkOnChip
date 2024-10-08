@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef PEMASTER_H
 #define PEMASTER_H
@@ -28,7 +28,7 @@ class ProcessorElementMaster : public sc_module
     /*!
      * \brief The data which will be send through the NoC.
      */
-    int *data;
+    int* data;
 
     /*!
      * \brief The identification number which holds the position of this module.

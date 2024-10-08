@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef NETWORKINTERFACE_H
 #define NETWORKINTERFACE_H
@@ -42,12 +42,12 @@ class NetworkInterface : public sc_module
     /*!
      * \brief The packet to be sent to the NoC.
      */
-    std::vector<Flit *> _sendPacket;
+    std::vector<Flit*> _sendPacket;
 
     /*!
      * \brief The packet to be received from the NoC.
      */
-    std::vector<Flit *> _receivePacket;
+    std::vector<Flit*> _receivePacket;
 
     /*!
      * \brief This mutex is responsible to make thread-safe both read/write threads.
@@ -72,14 +72,14 @@ class NetworkInterface : public sc_module
      * \param destinationId The destination to this payload.
      * \param payload the payload data.
      */
-    void _packMessage(unsigned destinationId, const std::vector<uint32_t> &payload);
+    void _packMessage(unsigned destinationId, const std::vector<uint32_t>& payload);
 
     /*!
      * \brief This method is used to unpack a packet of flits received from the NoC as a payload.
      * \param sourceId The source of this payload.
      * \param payload The payload data.
      */
-    const void _unpackMessage(int *sourceId, std::vector<uint32_t> *payload);
+    const void _unpackMessage(int* sourceId, std::vector<uint32_t>* payload);
 
     /*!
      * \brief This method is used to send a packet of flits to the NoC.
@@ -105,13 +105,13 @@ public:
     /*!
      * \brief Getter to the front-end reference.
      */
-    INetworkInterfaceFrontEnd *getFrontEndReference();
+    INetworkInterfaceFrontEnd* getFrontEndReference();
 
     /*!
      * \brief This method is used to connect a shell to the kernel.
      * \param networkInterfaceFrontEnd A reference of to the shell module.
      */
-    void connectFrontEnd(INetworkInterfaceFrontEnd *networkInterfaceFrontEnd);
+    void connectFrontEnd(INetworkInterfaceFrontEnd* networkInterfaceFrontEnd);
 };
 
 #endif // NETWORKINTERFACE_H

@@ -17,17 +17,18 @@ class SpecialKernel : public sc_module
     /*!
      * \brief Reference of a shell which is considered as master.
      */
-    INetworkInterfaceFrontEnd *_frontEndMaster;
+    INetworkInterfaceFrontEnd* _frontEndMaster;
 
     /*!
      * \brief Reference of a shell which is cnsidered as slave.
      */
-    INetworkInterfaceFrontEnd *_frontEndSlave;
+    INetworkInterfaceFrontEnd* _frontEndSlave;
 
     /*!
      * \brief Thread of communication between both shells.
      */
     void _threadConnectionMasterSlave();
+
 public:
     /*!
      * \brief Constructor
@@ -39,13 +40,13 @@ public:
      * \brief Connects the master shell to the kernel.
      * \param frontEndMaster A reference to the master shell.
      */
-    void connectMaster(INetworkInterfaceFrontEnd *frontEndMaster);
+    void connectMaster(INetworkInterfaceFrontEnd* frontEndMaster);
 
     /*!
      * \brief Connects the slave shell to the kernel.
      * \param frontEndSlave A reference to the slave shell.
      */
-    void connectSlave(INetworkInterfaceFrontEnd *frontEndSlave);
+    void connectSlave(INetworkInterfaceFrontEnd* frontEndSlave);
 };
 
 #endif // SPECIALKERNEL_H

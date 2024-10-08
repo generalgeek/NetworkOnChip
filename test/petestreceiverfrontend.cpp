@@ -2,14 +2,11 @@
 
 #include "nocdebug.h"
 
-PETestReceiverFrontEnd::PETestReceiverFrontEnd(sc_module_name name) :
-    sc_module(name)
-{
+PETestReceiverFrontEnd::PETestReceiverFrontEnd(sc_module_name name): sc_module(name) {
     SC_THREAD(_threadRun);
 }
 
-void PETestReceiverFrontEnd::_threadRun()
-{
+void PETestReceiverFrontEnd::_threadRun() {
     char sendChar;
     for (;;) {
         std::vector<uint32_t> payload;
@@ -21,4 +18,3 @@ void PETestReceiverFrontEnd::_threadRun()
         fifoOutput.write(sendChar);
     }
 }
-

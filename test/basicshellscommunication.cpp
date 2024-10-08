@@ -7,13 +7,11 @@
 #include "slaveshell.h"
 #include "specialkernel.h"
 
-
-int main()
-{
+int main() {
     Master master("PEMaster");
     MasterShell masterShell("MasterShell");
-    sc_fifo<int> *masterIntFifo = new sc_fifo<int>(1);
-    sc_fifo<char> *masterCharFifo = new sc_fifo<char>(1);
+    sc_fifo<int>* masterIntFifo = new sc_fifo<int>(1);
+    sc_fifo<char>* masterCharFifo = new sc_fifo<char>(1);
     master.masterOut(*masterIntFifo);
     masterShell.shellIn(*masterIntFifo);
     masterShell.shellOut(*masterCharFifo);
@@ -32,7 +30,6 @@ int main()
     multKernel.connectMaster(&masterShell);
     multKernel.connectSlave(&slaveShell);
 
-    sc_start(sc_time(100, SC_SEC),  SC_RUN_TO_TIME);
+    sc_start(sc_time(100, SC_SEC), SC_RUN_TO_TIME);
     return 0;
 }
-

@@ -10,8 +10,7 @@
 #include "petestreceiver.h"
 #include "petestreceiverfrontend.h"
 
-int main()
-{
+int main() {
     NetworkInterface senderKernel("SenderNI", 0);
     PETestSender senderPE("SenderPE");
     PETestSenderFrontEnd senderShell("SenderShell");
@@ -21,7 +20,6 @@ int main()
     senderShell.fifoInput(senderFIFO);
     // Connect Kernel and Shell
     senderKernel.connectFrontEnd(&senderShell);
-
 
     NetworkInterface receiverKernel("ReceiverNI", 0);
     PETestReceiver receiverPE("ReceiverPE");

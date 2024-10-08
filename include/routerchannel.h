@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef ROUTERCHANNEL_H
 #define ROUTERCHANNEL_H
@@ -19,6 +19,7 @@
 
 #include "irouterchannel.h"
 #include "flit.h"
+#define SC_KERNEL_EVENT_PREFIX "$$$$kernel_event$$$$_"
 
 /*!
  * \brief The RouterChannel class which is responsible for connecting routers and network interface modules and transmit
@@ -82,7 +83,7 @@ public:
      * \param name The channel name
      * \param id The unique channel id
      */
-    RouterChannel(const sc_module_name &name);
+    RouterChannel(const sc_module_name& name);
 
     /*!
      * \brief Getter to this channel name.
@@ -96,9 +97,9 @@ public:
      */
     unsigned getChannelId();
 
-    void sendFlit(Flit *flit) override;
+    void sendFlit(Flit* flit) override;
 
-    Flit *receiveFlit() override;
+    Flit* receiveFlit() override;
 };
 
 #endif // ROUTERCHANNEL_H

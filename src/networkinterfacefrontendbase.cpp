@@ -10,42 +10,39 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #include "networkinterfacefrontendbase.h"
 
-NetworkInterfaceFrontEndBase::NetworkInterfaceFrontEndBase() :
+NetworkInterfaceFrontEndBase::NetworkInterfaceFrontEndBase():
     _payloadDst(0),
     _payloadSrc(0),
-    _ack((std::string(SC_KERNEL_EVENT_PREFIX)+"NIShellBase_ack").c_str()),
-    _valid((std::string(SC_KERNEL_EVENT_PREFIX)+"NIShellBase_valid").c_str()),
+    _ack((std::string(SC_KERNEL_EVENT_PREFIX) + "NIShellBase_ack").c_str()),
+    _valid((std::string(SC_KERNEL_EVENT_PREFIX) + "NIShellBase_valid").c_str()),
     _ackFlag(false),
     _validFlag(false),
-    _writing((std::string(SC_KERNEL_EVENT_PREFIX)+"NIShellBase_writing").c_str()),
-    _reading((std::string(SC_KERNEL_EVENT_PREFIX)+"NIShellBase_reading").c_str()),
+    _writing((std::string(SC_KERNEL_EVENT_PREFIX) + "NIShellBase_writing").c_str()),
+    _reading((std::string(SC_KERNEL_EVENT_PREFIX) + "NIShellBase_reading").c_str()),
     _writingFlag(false),
-    _readingFlag(false)
-{
+    _readingFlag(false) {
 }
 
-void NetworkInterfaceFrontEndBase::sendPayload(const std::vector<uint32_t> &payload, int dst)
-{
+void NetworkInterfaceFrontEndBase::sendPayload(const std::vector<uint32_t>& payload, int dst) {
     _payloadDst = dst;
     _payload = payload;
     _writing.notify(SC_ZERO_TIME);
     _writingFlag = true;
-    for (;!_ackFlag;) {
+    for (; !_ackFlag;) {
         wait(_ack);
     }
     _ackFlag = false;
 }
 
-void NetworkInterfaceFrontEndBase::receivePayload(std::vector<uint32_t> &payload, int *src)
-{
+void NetworkInterfaceFrontEndBase::receivePayload(std::vector<uint32_t>& payload, int* src) {
     _reading.notify(SC_ZERO_TIME);
     _readingFlag = true;
 
-    for (;!_validFlag;) {
+    for (; !_validFlag;) {
         wait(_valid);
     }
     _validFlag = false;
@@ -54,9 +51,8 @@ void NetworkInterfaceFrontEndBase::receivePayload(std::vector<uint32_t> &payload
     *src = _payloadSrc;
 }
 
-void NetworkInterfaceFrontEndBase::kernelReceivePayload(std::vector<uint32_t> &payload, int *dst)
-{
-    for (;!_writingFlag;) {
+void NetworkInterfaceFrontEndBase::kernelReceivePayload(std::vector<uint32_t>& payload, int* dst) {
+    for (; !_writingFlag;) {
         wait(_writing);
     }
     _writingFlag = false;
@@ -67,9 +63,8 @@ void NetworkInterfaceFrontEndBase::kernelReceivePayload(std::vector<uint32_t> &p
     _ackFlag = true;
 }
 
-void NetworkInterfaceFrontEndBase::kernelSendPayload(const std::vector<uint32_t> &payload, int *src)
-{
-    for (;!_readingFlag;) {
+void NetworkInterfaceFrontEndBase::kernelSendPayload(const std::vector<uint32_t>& payload, int* src) {
+    for (; !_readingFlag;) {
         wait(_reading);
     }
 
@@ -82,9 +77,8 @@ void NetworkInterfaceFrontEndBase::kernelSendPayload(const std::vector<uint32_t>
     _payloadSrc = *src;
 }
 
-bool NetworkInterfaceFrontEndBase::kernelGetFrontEndReadingStatus()
-{
-    for (;!_readingFlag;) {
+bool NetworkInterfaceFrontEndBase::kernelGetFrontEndReadingStatus() {
+    for (; !_readingFlag;) {
         wait(_reading);
     }
     return _readingFlag;

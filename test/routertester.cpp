@@ -10,9 +10,7 @@
 #include "routerchannel.h"
 #include "networkinterface.h"
 
-int main()
-{
-
+int main() {
     // PEs
     Master master("PEMaster");
     Slave slave("PESlave");
@@ -90,7 +88,7 @@ int main()
     routerSlave.southChannelIn(slaveSouthChannelIn);
     routerSlave.southChannelOut(slaveSouthChannelOut);
     routerSlave.eastChannelIn(masterWestChannelOut); // Connection
-    routerSlave.eastChannelOut(masterWestChannelIn);// Connection
+    routerSlave.eastChannelOut(masterWestChannelIn); // Connection
     routerSlave.westChannelIn(slaveWestChannelIn);
     routerSlave.westChannelOut(slaveWestChannelOut);
 
@@ -99,11 +97,10 @@ int main()
     niMaster.localChannelOut(masterLocalChannelIn);
     niSlave.localChannelOut(slaveLocalChannelIn);
     niSlave.localChannelIn(slaveLocalChannelOut);
-//    niSlave.localChannelIn(masterWestChannelOut);
-//    niSlave.localChannelOut(masterWestChannelIn);
+    //    niSlave.localChannelIn(masterWestChannelOut);
+    //    niSlave.localChannelOut(masterWestChannelIn);
 
     // Run Simulation
     sc_start();
     return 0;
 }
-

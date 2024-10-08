@@ -2,14 +2,11 @@
 
 #include "nocdebug.h"
 
-PETestSenderFrontEnd::PETestSenderFrontEnd(sc_module_name name) :
-    sc_module(name)
-{
+PETestSenderFrontEnd::PETestSenderFrontEnd(sc_module_name name): sc_module(name) {
     SC_THREAD(_threadRun);
 }
 
-void PETestSenderFrontEnd::_threadRun()
-{
+void PETestSenderFrontEnd::_threadRun() {
     char receivedChar;
     for (;;) {
         fifoInput.read(receivedChar);

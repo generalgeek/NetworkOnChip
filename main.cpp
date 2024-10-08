@@ -12,7 +12,6 @@
  * Copyright 2015, 2016, 2017 - All rights reserved
  */
 
-
 /* NoC Topology
 
           [NI0]  ||             [NI1]  ||
@@ -37,33 +36,32 @@
 #include "noccommon.h"
 #include "nocdebug.h"
 
-#include "router.h"
-#include "routerchannel.h"
 #include "networkinterface.h"
 #include "networkinterfacefrontendbase.h"
 #include "nocassembler.h"
 #include "nocrouting.h"
+#include "router.h"
+#include "routerchannel.h"
 
 // PE Includes
 #include "pemaster.h"
 #include "pemastershell.h"
-#include "peslave.h"
-#include "peslaveshell.h"
 #include "penull.h"
 #include "penullshell.h"
+#include "peslave.h"
+#include "peslaveshell.h"
 
-void connectProcessorElementToNoC(const std::vector<NetworkInterface *> &networkInterfaces,
-                                  NetworkInterfaceFrontEndBase *shell, int position);
+void connectProcessorElementToNoC(const std::vector<NetworkInterface*>& networkInterfaces,
+                                  NetworkInterfaceFrontEndBase* shell, int position);
 /*!
  * \brief Main Function
  */
-int main(int argc, char *argv[])
-{
+int sc_main(int argc, char* argv[]) {
     // Routers
     NoCDebug::printDebug(std::string("Adding Routers:"), NoCDebug::Assembly);
-    std::vector<Router *> routers;
+    std::vector<Router*> routers;
     for (unsigned i = 0; i < NOC_SIZE; i++) {
-        std::string routerName("Router_");
+        std::string routerName("R_");
         routerName += std::to_string(i);
         routers.push_back(new Router(routerName.c_str(), i));
         NoCDebug::printDebug(std::string("> " + routerName), NoCDebug::Assembly);
@@ -71,9 +69,9 @@ int main(int argc, char *argv[])
 
     // Network Interfaces
     NoCDebug::printDebug(std::string("Adding Network Interfaces:"), NoCDebug::Assembly);
-    std::vector<NetworkInterface *> networkInterfaces;
+    std::vector<NetworkInterface*> networkInterfaces;
     for (unsigned i = 0; i < NOC_SIZE; i++) {
-        std::string niName("NetworkInterface_");
+        std::string niName("NI_");
         niName += std::to_string(i);
         networkInterfaces.push_back(new NetworkInterface(niName.c_str(), i));
         NoCDebug::printDebug(std::string("> " + niName), NoCDebug::Assembly);
@@ -82,38 +80,41 @@ int main(int argc, char *argv[])
     /////////////////////////////////////////////////////////////////////////////
     // Processor Elements Connections
     NoCDebug::printDebug(std::string("Adding PE Connections:"), NoCDebug::Assembly);
-    std::vector<int> masterPositions = {0, 2, 4, 6};
-    std::vector<int> slavePositions = {5, 3, 1, 15};
+    std::vector<int> masterPositions = { 0, 2, 4, 6 }; // 主设备位置
+    std::vector<int> slavePositions = { 5, 3, 1, 15 }; // 从设备位置
     int numberOfPairs = 4;
 
-    std::vector<std::pair<sc_fifo<int> *, sc_fifo<char> *>> masterConnections;
-    std::vector<std::pair<sc_fifo<int> *, sc_fifo<char> *>> slaveConnections;
+    std::vector<std::pair<sc_fifo<int>*, sc_fifo<char>*>> masterConnections;
+    std::vector<std::pair<sc_fifo<int>*, sc_fifo<char>*>> slaveConnections;
 
-    std::vector<ProcessorElementMaster *> processorMasterElements;
-    std::vector<ProcessorElementMasterShell *> processorMasterElementShells;
+    std::vector<ProcessorElementMaster*> processorMasterElements;           // 主设备
+    std::vector<ProcessorElementMasterShell*> processorMasterElementShells; // 主设备Shell
 
-    std::vector<ProcessorElementSlave *> processorSlaveElements;
-    std::vector<ProcessorElementSlaveShell *> processorSlaveElementShells;
+    std::vector<ProcessorElementSlave*> processorSlaveElements;           // 从设备
+    std::vector<ProcessorElementSlaveShell*> processorSlaveElementShells; //  从设备shell
 
+    // 连接NI-MasterShell-Master、NI-SlaveShell-Slave
     char initialChar = 'A';
     connectMastersAndSlaves(networkInterfaces, processorMasterElements, processorMasterElementShells, masterConnections,
-                            processorSlaveElements, processorSlaveElementShells, slaveConnections,
-                            masterPositions, slavePositions, numberOfPairs, &initialChar);
+                            processorSlaveElements, processorSlaveElementShells, slaveConnections, masterPositions,
+                            slavePositions, numberOfPairs, &initialChar);
 
-    // Vector of Null Processor Elements
-    std::vector<ProcessorElementNull *> processorNullElements;
-    std::vector<ProcessorElementNullShell *> processorNullElementShell;
+    // Vector of Null Processor Elements   空的IP核和它的shell
+    std::vector<ProcessorElementNull*> processorNullElements;
+    std::vector<ProcessorElementNullShell*> processorNullElementShell;
     /////////////////////////////////////////////////////////////////////////////
 
     // Channels or Links
-    std::vector<RouterChannel *> routerInputChannels, routerOutputChannels;
+    std::vector<RouterChannel*> routerInputChannels, routerOutputChannels;
 
+    // 组织路由器结构,一行两个，路由器之间使用输入输出通道连接
     // Assemble NoC
     assembleNoC(routers, routerInputChannels, routerOutputChannels);
 
+    // 连接NI和路由器
     // Stray Channels to the routers
-    connectStrayChannels(routers, routerInputChannels, routerOutputChannels, networkInterfaces,
-                         processorNullElements, processorNullElementShell);
+    connectStrayChannels(routers, routerInputChannels, routerOutputChannels, networkInterfaces, processorNullElements,
+                         processorNullElementShell);
 
     // Start Simulation
     std::cout << "Start NoC Simulation..." << std::endl;
@@ -122,8 +123,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void connectProcessorElementToNoC(const std::vector<NetworkInterface *> &networkInterfaces,
-                                  NetworkInterfaceFrontEndBase *shell, int position)
-{
+void connectProcessorElementToNoC(const std::vector<NetworkInterface*>& networkInterfaces,
+                                  NetworkInterfaceFrontEndBase* shell, int position) {
     networkInterfaces.at(position)->connectFrontEnd(shell);
 }

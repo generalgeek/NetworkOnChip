@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #include "pemaster.h"
 
@@ -18,12 +18,8 @@
 
 #include "nocdebug.h"
 
-ProcessorElementMaster::ProcessorElementMaster(sc_module_name name, unsigned position, unsigned slavePosition) :
-    sc_module(name),
-  _position(position),
-  _slavePosition(slavePosition)
-{
-
+ProcessorElementMaster::ProcessorElementMaster(sc_module_name name, unsigned position, unsigned slavePosition):
+    sc_module(name), _position(position), _slavePosition(slavePosition) {
     NoCDebug::printDebug(std::string("> Master: M" + std::to_string(_position) + "S" + std::to_string(_slavePosition)),
                          NoCDebug::Assembly);
     data = new int[5];
@@ -36,11 +32,11 @@ ProcessorElementMaster::ProcessorElementMaster(sc_module_name name, unsigned pos
     SC_THREAD(_threadRun)
 }
 
-void ProcessorElementMaster::_threadRun()
-{
-    for (int cnt = 0;cnt < 5;cnt++) {
+void ProcessorElementMaster::_threadRun() {
+    for (int cnt = 0; cnt < 5; cnt++) {
         NoCDebug::printDebug("M" + std::to_string(_position) + "S" + std::to_string(_slavePosition) +
-                             ": Master -> MShell      DATA: " + std::to_string(data[cnt]), NoCDebug::PE);
+                                 ": Master -> MShell      DATA: " + std::to_string(data[cnt]),
+                             NoCDebug::PE);
         masterOut.write(data[cnt]);
         char read;
         masterIn.read(read);

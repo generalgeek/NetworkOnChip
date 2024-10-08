@@ -15,11 +15,12 @@ class ChannelTester : public sc_module
 
     bool _send;
 
-    Flit *_innerFlit;
+    Flit* _innerFlit;
 
     int _packetCounter;
 
     int _0ID;
+
 public:
     // IO Port
     sc_port<RouterChannel> channel;

@@ -7,7 +7,7 @@ class ProcessorElementMaster : public sc_module
 {
     SC_HAS_PROCESS(ProcessorElementMaster);
 
-    int *data;
+    int* data;
 
     void _threadRun();
 

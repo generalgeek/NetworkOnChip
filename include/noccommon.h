@@ -22,25 +22,19 @@
 #include <map>
 
 // Project Parameters
-const unsigned NOC_ROUTER_BUFFER_SIZE = 32; // Number of Flits of a router channel buffer
+const unsigned NOC_ROUTER_BUFFER_SIZE = 32;     // Number of Flits of a router channel buffer
 const unsigned NOC_ROUTER_ROUND_ROBIN_SIZE = 3; // Number of Flits sent by the arbiter before it preemptively changes.
 
 // NoC Topology Characteristics
-const unsigned NOC_SIZE = 16; // Number of Processor Elements
+const unsigned NOC_SIZE = 16;    // Number of Processor Elements
 const unsigned NOC_ROW_SIZE = 2; // Number of PE per row
 
 // Link Type
-enum Link {
-    Local = 0,
-    North = 1,
-    South = 2,
-    East = 3,
-    West = 4
-};
+enum Link { Local = 0, North = 1, South = 2, East = 3, West = 4 };
 
 // Processors Map
 // Maps the unique id from the processor to its NoC Position
-typedef std::map<std::string, int> Map_t ;
+typedef std::map<std::string, int> Map_t;
 static Map_t PROCESSORS_MAP;
 
 /*!
@@ -48,8 +42,7 @@ static Map_t PROCESSORS_MAP;
  * \param position Destination Router.
  * \param link Link used in the current router to reach the destination router.
  */
-struct routingInfo
-{
+struct routingInfo {
     unsigned position;
     unsigned link;
 };

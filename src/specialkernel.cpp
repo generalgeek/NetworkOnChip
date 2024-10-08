@@ -1,25 +1,18 @@
 #include "specialkernel.h"
 
-SpecialKernel::SpecialKernel(sc_module_name name) :
-    sc_module(name),
-    _frontEndMaster(nullptr),
-    _frontEndSlave(nullptr)
-{
+SpecialKernel::SpecialKernel(sc_module_name name): sc_module(name), _frontEndMaster(nullptr), _frontEndSlave(nullptr) {
     SC_THREAD(_threadConnectionMasterSlave);
 }
 
-void SpecialKernel::connectMaster(INetworkInterfaceFrontEnd *frontEndMaster)
-{
+void SpecialKernel::connectMaster(INetworkInterfaceFrontEnd* frontEndMaster) {
     _frontEndMaster = frontEndMaster;
 }
 
-void SpecialKernel::connectSlave(INetworkInterfaceFrontEnd *frontEndSlave)
-{
+void SpecialKernel::connectSlave(INetworkInterfaceFrontEnd* frontEndSlave) {
     _frontEndSlave = frontEndSlave;
 }
 
-void SpecialKernel::_threadConnectionMasterSlave()
-{
+void SpecialKernel::_threadConnectionMasterSlave() {
     if (!_frontEndMaster && !_frontEndSlave) {
         std::string message("Front-Ends Not Connected NI-Id:");
     } else {

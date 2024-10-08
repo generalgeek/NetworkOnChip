@@ -10,7 +10,7 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #ifndef PENULL_H
 #define PENULL_H
@@ -29,6 +29,7 @@ class ProcessorElementNull : public sc_module
      * \brief Position of the element in the NoC.
      */
     unsigned _position;
+
 public:
     /*!
      * \brief ProcessorElementNull Constructor.

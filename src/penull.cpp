@@ -10,14 +10,12 @@
  * Matrícula: 17/0067033
  * Copyright 2017 - All rights reserved
  ******************************************************************************************
-*/
+ */
 
 #include "penull.h"
 
 #include "nocdebug.h"
 
-ProcessorElementNull::ProcessorElementNull(sc_module_name name, unsigned position) :
-    _position(position)
-{
+ProcessorElementNull::ProcessorElementNull(sc_module_name name, unsigned position): _position(position) {
     NoCDebug::printDebug(std::string("> Null: N" + std::to_string(_position)), NoCDebug::Assembly);
 }
